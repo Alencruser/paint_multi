@@ -1,6 +1,7 @@
 
 let shape = 'ellipse';
-let color = [255,255,255];
+let colorSelected = [255,255,255];
+let c;
 
 function setup() {
     createCanvas(1200, 800);
@@ -9,21 +10,22 @@ function setup() {
 }
 
 function draw() {
+    fill(color(...colorSelected))
     if (mouseIsPressed === true) {
         ellipse(mouseX, mouseY, 50, 50);
-        socket.emit('draw', {mousePos: [mouseX, mouseY], shape, color})
+        socket.emit('draw', {mousePos: [mouseX, mouseY], shape, colorReceived: colorSelected})
       } 
 }
 
 
 
 socket.on('draw', (params) => {
-    const {mousePos, shape, color} = params;
+    const {mousePos, shape, colorReceived} = params;
+    let c = color(colorReceived[0], colorReceived[1], colorReceived[2]);
+    fill(c);
+    noStroke();
     switch(shape) {
         case 'ellipse':
-            // let c = color(color[0], color[1], color[2]);
-            // fill(c);
-            // noStroke();
             ellipse(mousePos[0], mousePos[1], 50, 50)
             break;
     }

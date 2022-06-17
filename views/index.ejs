@@ -4,14 +4,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <title>Document</title>
 </head>
 <body>
-    
+    <div id="main-page">
+        <div id="canva"></div>
+        <div id="color-selecter">
+            <input id="red" class="color-changer" type="number" min="0" max="255" value="255">
+            <input id="green" class="color-changer" type="number" min="0" max="255" value="255">
+            <input id="blue" class="color-changer" type="number" min="0" max="255" value="255">
+            <div id="color-chosen" style="height:24px;width:24px"></div>
+        </div>
+    </div>
     <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
     <script src="p5.min.js"></script>
     <script>
   const socket = io();
+  document.querySelectorAll('.color-changer').forEach( (input) => {
+    const eventCallback = () => {
+        console.log('je change')
+        const [red,green, blue] = [document.getElementById('red').value,document.getElementById('green').value, document.getElementById('blue').value]
+        colorSelected = [red, green, blue];
+        document.getElementById('color-chosen').style.backgroundColor = `rgb(${red},${green}, ${blue})`;
+    }
+    input.addEventListener('keyup', eventCallback);
+    input.addEventListener('change', eventCallback);
+  });
 </script>
     <script src="sketch.js"></script>
 </body>
