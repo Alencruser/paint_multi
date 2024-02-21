@@ -1,5 +1,6 @@
+import pickr from './color-picker.js'
+import './p5.min.js';
 let shapeSelected = "ellipse";
-let colorSelected = [255, 255, 255];
 
 document.querySelectorAll(".shape").forEach((i) => {
   i.addEventListener("click", () => {
@@ -8,23 +9,24 @@ document.querySelectorAll(".shape").forEach((i) => {
 });
 
 function setup() {
-  createCanvas(1200, 800);
+  let canvas = createCanvas(1200, 800);
+  canvas.parent('canvas')
   line(15, 25, 70, 90);
   background(0, 0, 0);
 }
 
 function draw() {
-    fill(color(...colorSelected));
+    fill(color(...(pickr.getSelectedColor().toRGBA().slice(0,3))));
     if (mouseIsPressed === true) {
         switch (shapeSelected) {
           case "ellipse":
             ellipse(mouseX, mouseY, 50, 50);
             break;
           case "rect":
-            rect(mouseX, mouseY, 50, 50);
+            rect(mouseX -25, mouseY -25, 50, 50);
             break;
           case "triangle":
-            console.log("triangle");
+            console.log("triangle porque tu te lance draw ?");
             triangle(
                 mouseX -30,
                 mouseY +30,
@@ -34,7 +36,7 @@ function draw() {
                 mouseY -30
               );            break;
         }
-        socket.emit("draw", { mousePos: [mouseX, mouseY], shapeReceived: shapeSelected, colorReceived: colorSelected });
+        socket.emit("draw", { mousePos: [mouseX, mouseY], shapeReceived: shapeSelected, colorReceived: pickr.getSelectedColor().toRGBA().slice(0,3) });
       }
 }
 
@@ -51,7 +53,7 @@ socket.on("draw", (params) => {
       rect(mousePos[0], mousePos[1], 50, 50);
       break;
     case "triangle":
-      console.log("triangle");
+      console.log("triangle on");
       triangle(
         mousePos[0] -30,
         mousePos[1] +30,
@@ -63,3 +65,8 @@ socket.on("draw", (params) => {
       break;
   }
 });
+
+
+// Cause P5 is old
+window.setup = setup; 
+window.draw = draw
